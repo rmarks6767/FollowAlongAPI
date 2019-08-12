@@ -1,9 +1,20 @@
-﻿//TODO 3. Compatibility Version requires Microsoft.AspNetCore.Mvc, add that here.  Also these four should be the only thing here for right now.
+﻿/*Overview of the StartUp class:
+ This class is responsible for managing all of the Dependency injectable files,
+ the database configuration, and all of the extra addons that you will be using 
+ in your api (CORS, authentication, logging, etc).  Any thing that will be 
+ dependency injected needs to be registered in this file, if not, it will never 
+ be found.  
+ */
+
+//TODO 0.1.b Add the dependency injection namespace
+using Microsoft.Extensions.DependencyInjection;
+//TODO 0.2.b Add the graphql namespace
+using GraphQL;
+//TODO 0.3.b Add the ASPNETCORE namespaces
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-//TODO 5. Add the GraphiQL reference
+//TODO 0.4.b Add the GraphiQL interface namespace
 using GraphiQl;
 
 namespace FollowAlongLearnAPI
@@ -12,10 +23,13 @@ namespace FollowAlongLearnAPI
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            //TODO 1. Register an implementation of the HttpServiceCollection
+            //TODO 0.1.a Register an implementation of the HttpServiceCollection
             services.AddHttpContextAccessor();
 
-            //TODO 2. Add MVC and Set Compatibility Version to latest (the ASP CORE version)
+            //TODO 0.2.a Add the GraphQL nuget package and the Document Executer
+            services.AddScoped<IDocumentExecuter, DocumentExecuter>();
+
+            //TODO 0.3.a Add MVC and Set Compatibility Version to latest (the ASP CORE version)
             services
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest);
@@ -28,10 +42,12 @@ namespace FollowAlongLearnAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-            //TODO 4. Tell the application the GraphiQL interface, this requires the nuget package GraphiQL, you can add that now
+            //TODO 0.4.a Tell the application the GraphiQL interface, this requires the nuget package GraphiQL, you can add that now
             app.UseGraphiQl("/graph", "/graphql"); 
-            //TODO 6. Add MVC to the application
+            //TODO 0.5 Add MVC to the application
             app.UseMvc();
         }
     }
 }
+
+//TODO 1.0 We will now make a folder called middleware.  Add two files into this folder: GraphQLController.cs and GraphQLQuery.cs
