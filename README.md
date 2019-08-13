@@ -30,7 +30,7 @@
     * [Giving it a Try](#giveitatry)
 
 # Module 1: Before the Logic <a name="module1"></a>
-In this module we will cover the basics of using .NetCore with GraphQL.  We will make a simple Account object and by the end be able to query our account object.  We will also cover the basics of a C# Web API and the things you'll need from that to get GraphQL DotNet to operate properly.
+In this module we will cover the basics of using .NetCore with GraphQL.  We will make a simple Account object and by the end be able to query our account object.  We will also cover the basics of a C# Web API and the things you'll need from that to get GraphQL DotNet to operate properly.  You can find the source of this module at this [commit](https://github.com/rmarks6767/FollowAlongAPI/commit/46597cda7fa4a63ecfc50e1fe871aaeb984e67e6) or by downloading the source from the [release](https://github.com/rmarks6767/FollowAlongAPI/releases/tag/v1.0)
 
 ## Creating a new Project <a name="creating"></a>
 **0.0** Create a new empty ASP .NET CORE web application
