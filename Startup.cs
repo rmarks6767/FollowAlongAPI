@@ -1,7 +1,7 @@
 ﻿/*Overview of the StartUp class:
  This class is responsible for managing all of the Dependency injectable files,
  the database configuration, and all of the extra add-ons that you will be using 
- in your API (CORS, authentication, logging, etc).Anything that will be dependency 
+ in your API (CORS, authentication, logging, etc). Anything that will be dependency 
  injected needs to be registered in this file if not, it will never be found.  
  */
 
@@ -15,6 +15,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 //TODO 0.4.b Add the GraphiQL interface namespace
 using GraphiQl;
+//TODO 2.5.b Add the references to those three classes
+using Schema = FollowAlongLearnAPI.MiddleWare.Schema;
+using FollowAlongLearnAPI.MiddleWare.Queries;
+using FollowAlongLearnAPI.MiddleWare.Mutations;
+using GraphQL.Types;
 
 namespace FollowAlongLearnAPI
 {
@@ -27,6 +32,12 @@ namespace FollowAlongLearnAPI
 
             //TODO 0.2.a Add the GraphQL nuget package and the Document Executer
             services.AddScoped<IDocumentExecuter, DocumentExecuter>();
+
+            //TODO 2.5.a Now we will add a reference to the RootQuery, RootMutation, and the Schema.  Note that the Schema has to be last, as it will not have all the stuff we injected if it wasn't.
+            services
+                .AddScoped<RootQuery>()
+                .AddScoped<RootMutation>()
+                .AddSingleton<ISchema, Schema>();
 
             //TODO 0.3.a Add MVC and Set Compatibility Version to latest (the ASP CORE version)
             services
@@ -48,5 +59,6 @@ namespace FollowAlongLearnAPI
         }
     }
 }
-
 //TODO 1.0 We will now make a folder called middleware.  Add two files into this folder: GraphQLController.cs and GraphQLQuery.cs
+
+//TODO 3.0 Now it's time to actually start making the logic behind all of the API.  For our example, we will do account creation, account querying, and account deletion.  We will start by defining the models for an account.  Start by creating a Model folder and adding a file Account.cs
