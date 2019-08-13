@@ -1,3 +1,5 @@
+*The best way to learn something new is to dive head first into a project with little to no knowledge.  This mini tutorial encompasses that idea and guides you along the way.  Below are all the comments you can find scattered throughout the project, leading you to understand where every piece of code came from, as well as why you put it there.  If there's anything that needs a little bit more explaining, feel free to open a PR and let me know!  I hope you enjoy this unique take on a tutorial!*
+
 # Table of Contents
 * [Creating a new Project](#creating)
   * [Program.cs](#program)
