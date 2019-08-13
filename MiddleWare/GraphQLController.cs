@@ -69,8 +69,8 @@ namespace FollowAlongLearnAPI.MiddleWare
                 //TODO 1.5.e.2 For now we will just return the errors, but coming up with how you want to report the errors is important.  I would suggest reporting errors, data, and a status code that corresponds to any errors that occurred
                 return result.Errors; 
 
-            //TODO 1.5.f Now that we have checked if there are any errors, we can return the normal data.
-            return result.Data;
+            //TODO 1.5.f Now that we have checked if there are any errors, we can return the result.
+            return result;
         }
     }
 }

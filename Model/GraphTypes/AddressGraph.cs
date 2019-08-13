@@ -10,12 +10,12 @@ namespace FollowAlongLearnAPI.Model.GraphTypes
         //TODO 3.9.c.1 Make a constructor for the AddressGraph type.
         public AddressGraph()
         {
-            //TODO 3.9.c.2 Add a name and description to the AddressGraph
+            //TODO 3.9.c.2 Add a name and description to the AddressGraph.
             Name = "Address";
             Description = "Holds all the information associated with the Account Address";
             //TODO 3.9.c.3 Define all of the fields from the Address class.
             Field(account => account.Country).Name("country");
-            Field(account => account.HouseNumber).Name("houseNumber");
+            Field(account => account.BoxNumber).Name("boxNumber");
             Field(account => account.State).Name("state");
             Field(account => account.Street).Name("street");
             Field(account => account.Zipcode).Name("zipcode");

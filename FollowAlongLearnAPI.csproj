@@ -7,9 +7,10 @@
 
   <ItemGroup>
     <PackageReference Include="GraphiQL" Version="1.2.0" />
-    <PackageReference Include="GraphQL" Version="3.0.0-preview-1194" />
+    <PackageReference Include="GraphQL" Version="3.0.0-preview-1175" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.5.1" />
   </ItemGroup>
 
 </Project>

@@ -13,9 +13,9 @@ using GQLSchema = GraphQL.Types.Schema;
 //TODO 1.8.c Add a reference to System to use the IServiceProvider
 using System;
 //TODO 1.8.e.2 Add These namespaces to use the query, mutation, and the GetRequiredService Extension
-using GraphQL.Utilities;
 using FollowAlongLearnAPI.MiddleWare.Queries;
 using FollowAlongLearnAPI.MiddleWare.Mutations;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FollowAlongLearnAPI.MiddleWare
 {
@@ -28,7 +28,7 @@ namespace FollowAlongLearnAPI.MiddleWare
             //TODO 1.8.d This is where we will add a reference to the RootQuery and RootMutation.  Make those files now in the middleware folder.  These should be in their own folders called Queries and Mutations Respectively.
             //TODO 1.8.e.1 Now we can add a reference to both of those classes.  You should get errors because we have not set up either of those classes yet.
             Query = serviceProvider.GetRequiredService<RootQuery>();
-            Mutation = serviceProvider.GetRequiredService<RootMutation>();
+            //Mutation = serviceProvider.GetRequiredService<RootMutation>();
         }
     }
 }

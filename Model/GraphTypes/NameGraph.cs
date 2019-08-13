@@ -10,7 +10,7 @@ namespace FollowAlongLearnAPI.Model.GraphTypes
         //TODO 3.8.c.1 Make a constructor for the NameGraph type.
         public NameGraph()
         {
-            //TODO 3.8.c.2 Add a name and description to the AddressGraph
+            //TODO 3.8.c.2 Add a name and description to the AddressGraph.
             Name = "Name";
             Description = "Holds first name and last name from the Account type";
             //TODO 3.8.c.3 Define all of the fields from the Name class.
