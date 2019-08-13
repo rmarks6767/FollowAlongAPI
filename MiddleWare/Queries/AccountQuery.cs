@@ -14,7 +14,7 @@ namespace FollowAlongLearnAPI.MiddleWare.Queries
         public AccountQuery() //TODO 4.2.e.1* NOTE that we will inject the repository at this level
         {
             //TODO 4.2.e.2 Give the Query a Name and Description
-            Name = "Account";
+            Name = "AccountQuery";
             Description = "The account information can be retrieved here";
 
             //TODO 4.2.e.3 Now we are going to create a field.  This is going to be how we get the actual value of the account, it will come through here.
