@@ -61,4 +61,4 @@ namespace FollowAlongLearnAPI
 }
 //TODO 1.0 We will now make a folder called middleware.  Add two files into this folder: GraphQLController.cs and GraphQLQuery.cs
 
-//TODO 3.0 Now it's time to actually start making the logic behind all of the API.  For our example, we will do account creation, account querying, and account deletion.  We will start by defining the models for an account.  Start by creating a Model folder and adding a file Account.cs
+//TODO 3.0 Now it's time to actually start making the logic behind all of the API.  For our example, we will do account creation, account querying, and account deletion.  We will start by defining the models for an account.  Start by creating a Model folder and a Base folder in that. Add a file called Account.cs to that base folder.
