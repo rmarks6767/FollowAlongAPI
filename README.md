@@ -38,7 +38,8 @@ Upon creating a new project, you will be presented with three files (Startup.cs,
 
 ### Program.cs <a name="program"></a>
 **1.0.0.a** This is where the startup will be called. <br>
-**1.0.0.b** Let's also take this time to edit the launchSettings.json file, you'll find in that file what should be in there.
+**1.0.0.b** Let's also take this time to edit the launchSettings.json file, you'll find in that file what should be in there.<br>
+**1.0.0.c** Remove all but this from the launch settings app.
 
 ### Startup.cs <a name="startup"></a>
  This class is responsible for managing all of the Dependency injectable files,
