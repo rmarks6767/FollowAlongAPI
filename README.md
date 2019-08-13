@@ -76,6 +76,7 @@ The schema is what actually makes up GraphQL.  Defining logic in 'Graphs' allows
 **2.1.e.2** Add These namespaces to use the query, mutation, and the GetRequiredService Extension. <br>
 **2.2** The Schema is now all done so let's head over to the RootQuery class and set that one up.<br>
 
+# Middleware Meat and Potatoes
 ## RootQuery.cs
 
 
