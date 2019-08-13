@@ -1,4 +1,22 @@
-﻿//TODO 1.1.b Add MVC.
+﻿/* The Controller Overview
+ The controller is where all the requests 
+ will actually be made to.  The endpoint,
+ as defined by the name {something}Controller,
+ allows the user to request different data in
+ a traditional REST API model.  GraphQL allows 
+ this to behave a little differently.  Instead
+ of having multiple controllers, you will have one.
+ That one is responsible for controlling the 
+ logic and directing all of the requests made 
+ to the API.  For our example here, our main 
+ endpoint will be https://localhost:5001/graphql.
+ That endpoint directly corresponds to this document.
+ To view the schema you will want to direct your 
+ attention to https://localhost:5001/graph, where
+ the GraphiQL interface will be displayed. 
+ */
+
+//TODO 1.1.b Add MVC namespace.
 using Microsoft.AspNetCore.Mvc;
 //TODO 1.2.b Add GraphQL for the Executer and GraphQL.Types for the ISchema
 using GraphQL;
@@ -44,6 +62,17 @@ namespace FollowAlongLearnAPI.MiddleWare
             };
 
             //TODO 1.5.d We will now send that to the executor, which will resolve the query and return a result
+            ExecutionResult result = await executer.ExecuteAsync(executionOptions).ConfigureAwait(false);
+
+            //TODO 1.5.e.1 With that result, we will check for errors and report them as necessary
+            if (result.Errors?.Count > 0)
+                //TODO 1.5.e.2 For now we will just return the errors, but coming up with how you want to report the errors is important.  I would suggest reporting errors, data, and a status code that corresponds to any errors that occurred
+                return result.Errors; 
+
+            //TODO 1.5.f Now that we have checked if there are any errors, we can return the normal data.
+            return result.Data;
         }
     }
 }
+
+//TODO 1.6 For now the controller is done.  Now it's time to build a schema and add some logic into the mix. Make a file called Schema.cs and put it into the Middleware folder.

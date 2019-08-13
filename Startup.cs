@@ -1,9 +1,8 @@
 ﻿/*Overview of the StartUp class:
  This class is responsible for managing all of the Dependency injectable files,
- the database configuration, and all of the extra addons that you will be using 
- in your api (CORS, authentication, logging, etc).  Any thing that will be 
- dependency injected needs to be registered in this file, if not, it will never 
- be found.  
+ the database configuration, and all of the extra add-ons that you will be using 
+ in your API (CORS, authentication, logging, etc).Anything that will be dependency 
+ injected needs to be registered in this file if not, it will never be found.  
  */
 
 //TODO 0.1.b Add the dependency injection namespace
