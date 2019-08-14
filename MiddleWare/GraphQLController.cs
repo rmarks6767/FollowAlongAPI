@@ -58,7 +58,7 @@ namespace FollowAlongLearnAPI.MiddleWare
             {
                 Schema = schema,                   //TODO 1.1.5.c.1 Set the schema equal to the one we injected
                 Query = query.Query,               //TODO 1.1.5.c.2 Set the query equal to the query from the custom object
-                Inputs = query.Inputs.ToInputs()   //TODO 1.1.5.c.3 Set any variables equal to the inputs
+                Inputs = query.Variables.ToInputs()   //TODO 1.1.5.c.3 Set any variables equal to the inputs
             };
 
             //TODO 1.1.5.d We will now send that to the executor, which will resolve the query and return a result

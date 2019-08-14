@@ -16,6 +16,11 @@ namespace FollowAlongLearnAPI.MiddleWare.Mutations
             //TODO 1.2.4.c Also getting in the habit of giving each Graph Type a description will help the front end a lot.
             Description = "The highest definition of mutation";
             //TODO 1.2.4.d The field definitions will go here.  First, let's go back to the Startup class and add the files we just created.
+
+            //TODO 2.4.1 Now it is time to write the logic for the mutation end of things.  Because there is three functions that need to be defined, we are going to put it in a separate file called AccountMutation.
+            //TODO 2.4.2 Before we Create that file, we are going to register it to the RootMutation so we do not have to come back to this file
+            Field<AccountMutation>("account", resolve: context => new { });
+            //TODO 2.4.3 Now Add that file to the Mutations folder. Head on over to that new file now.
         }
     }
 }

@@ -11,8 +11,8 @@ namespace FollowAlongLearnAPI.MiddleWare
         public string NamedOperation { get; set; }
         //TODO 1.1.4.c The query is the information that you request from the database
         public string Query { get; set; }
-        //TODO 1.1.4.d The inputs are any variables that you may have in your query
-        public JObject Inputs { get; set; }
+        //TODO 1.1.4.d The Variables are any inputs that you may have in your query
+        public JObject Variables { get; set; }
     }
 }
 

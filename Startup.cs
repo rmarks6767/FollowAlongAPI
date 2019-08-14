@@ -29,6 +29,8 @@ using FollowAlongLearnAPI.Configuration;
 //TODO 2.3.2.b Register the repository interface and class.
 using FollowAlongLearnAPI.Repositories.Interfaces;
 using FollowAlongLearnAPI.Repositories;
+//TODO 2.5.1.b Add the reference to those Inputs and you are done!
+using FollowAlongLearnAPI.Model.Inputs;
 
 namespace FollowAlongLearnAPI
 {
@@ -63,6 +65,13 @@ namespace FollowAlongLearnAPI
                 .AddScoped<AccountGraph>()
                 .AddScoped<AddressGraph>()
                 .AddScoped<NameGraph>()
+            
+            //TODO 2.5.1.a Add the AccountMutation, AccountInput, AddressInput, and the NameInput to the services.
+                .AddScoped<AccountMutation>()
+                .AddScoped<AccountInput>()
+                .AddScoped<AddressInput>()
+                .AddScoped<NameInput>()
+
                 .AddSingleton<ISchema, Schema>();
 
             //TODO 1.0.3.a Add MVC and Set Compatibility Version to latest (the ASP CORE version)
@@ -138,3 +147,5 @@ query {
 //TODO 1.4.5 THIS ENDS MODULE 1. CONTINUE ON TO MODULE 2 BELOW ↓↓↓
 
 //TODO 2.0.0 Module 2 will cover the Logic of getting the data.  To start, create a new folder called Repositories and add a class called AccountRepository.
+
+//TODO 1.6 THAT ENDS MODULE 2.  ADVANCED TIPS AND TRICKS COMING SOON.

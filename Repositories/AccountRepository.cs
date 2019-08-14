@@ -77,7 +77,8 @@ namespace FollowAlongLearnAPI.Repositories
             try
             {
                 //TODO 2.1.3.d We will Upsert the account, if anything goes wrong, it will return the failure status code.
-                _ = await client.UpsertDocumentAsync(dbHandler.GetCollectionUri(), accountToBeUpdated);
+                ResourceResponse<Document> resource = await client.UpsertDocumentAsync(dbHandler.GetCollectionUri(), accountToBeUpdated, disableAutomaticIdGeneration: true);
+                accountToBeUpdated.Id = resource.Resource.Id;
                 return HttpStatusCode.OK;
             }
             catch (DocumentClientException e)

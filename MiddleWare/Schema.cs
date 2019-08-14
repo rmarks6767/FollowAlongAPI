@@ -28,7 +28,7 @@ namespace FollowAlongLearnAPI.MiddleWare
             //TODO 1.1.8.d This is where we will add a reference to the RootQuery and RootMutation.  Make those files now in the middleware folder.  These should be in their own folders called Queries and Mutations Respectively.
             //TODO 1.1.8.e.1 Now we can add a reference to both of those classes.  You should get errors because we have not set up either of those classes yet.
             Query = serviceProvider.GetRequiredService<RootQuery>();
-            //Mutation = serviceProvider.GetRequiredService<RootMutation>();
+            Mutation = serviceProvider.GetRequiredService<RootMutation>();
         }
     }
 }

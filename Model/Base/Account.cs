@@ -1,4 +1,7 @@
-﻿namespace FollowAlongLearnAPI.Model.Base
+﻿//TODO 1.3.4.1.b Add the reference to Newtonsoft for the Json Property.
+using Newtonsoft.Json;
+
+namespace FollowAlongLearnAPI.Model.Base
 {
     public class Account
     {
@@ -9,7 +12,10 @@
         public Name Name { get; set; }
         //TODO 1.3.3.a For the Address, we are going to make another type, add that to the model folder now.
         public Address Address { get; set; }
+        //TODO 1.3.4.1.a Add a field for Getting the Id that Cosmos makes.  Also for things that are names differently in Cosmos, you should add a JSON property with them.
+        [JsonProperty("id")]
+        public string Id { get; set; }
     }
 }
 
-//TODO 1.3.4 Now that the Account model is defined, we will make Graph types for these three models.  Make a folder called GraphTypes in the Model folder.  Add a type called AccountGraph to this folder.
+//TODO 1.3.4.2 Now that the Account model is defined, we will make Graph types for these three models.  Make a folder called GraphTypes in the Model folder.  Add a type called AccountGraph to this folder.

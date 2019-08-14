@@ -16,7 +16,7 @@ namespace FollowAlongLearnAPI.Model.GraphTypes
 
             //TODO 1.3.7.a Now we are going to define each of the fields on the account type as a GraphQL type.
             Field(account => account.UserName).Name("userName");  //TODO 1.3.7.a.1 Right here we are saying "GraphQL this field should be exposed for querying (username) and its name should be userName"
-            //TODO 1.3.7.b Now do that for the rest of the fields. NOTE this can only be done for types that are Primitive, if there's a type that is different, like Address, you will have to make a separate Graph Type for it.
+            Field(account => account.Id).Name("id");              //TODO 1.3.7.b Now do that for the rest of the fields. NOTE this can only be done for types that are Primitive, if there's a type that is different, like Address, you will have to make a separate Graph Type for it.
             Field(account => account.Password).Name("password");
             //TODO 1.3.8.a Now create a GraphType for the Name model type.  Put it in the same GraphTypes folder.
             //TODO 1.3.8.d Now that we created that GraphType, we are going to register it like so:
