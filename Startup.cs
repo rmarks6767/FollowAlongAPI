@@ -22,11 +22,23 @@ using FollowAlongLearnAPI.MiddleWare.Mutations;
 using GraphQL.Types;
 //TODO 1.4.3.1.b Add references to those classes.
 using FollowAlongLearnAPI.Model.GraphTypes;
+//TODO 2.0.8.a.2 Add a reference to the Microsoft.Extensions.Configuration namespace to use the IConfiguration interface.
+using Microsoft.Extensions.Configuration;
+//TODO 2.0.8.d.3 Add a reference to the AccountConfiguration class we just made in the last step.
+using FollowAlongLearnAPI.Configuration;
+//TODO 2.3.2.b Register the repository interface and class.
+using FollowAlongLearnAPI.Repositories.Interfaces;
+using FollowAlongLearnAPI.Repositories;
 
 namespace FollowAlongLearnAPI
 {
     public class Startup
     {
+        //TODO 2.0.8.a.1 Make a public Configuration accessor.
+        public IConfiguration Configuration { get; }
+        //TODO 2.0.8.b Now create a constructor for the Startup class that takes in an IConfiguration
+        public Startup(IConfiguration configuration) => Configuration = configuration;  //TODO 2.0.8.c Set the configurations equal to each other.
+
         public void ConfigureServices(IServiceCollection services)
         {
             //TODO 1.0.1.a Register an implementation of the HttpServiceCollection.
@@ -34,6 +46,12 @@ namespace FollowAlongLearnAPI
 
             //TODO 1.0.2.a Add the GraphQL nuget package and the Document Executer.
             services.AddScoped<IDocumentExecuter, DocumentExecuter>();
+
+            //TODO 2.0.8.d.1 Now we are going to add that configuration to the services (make it dependency injectable)
+            services.Configure<AccountConfiguration>(Configuration.GetSection("AccountConfiguration"));  //TODO 2.0.8.d.2 What this is doing is accessing the appsettings.json file and getting the section AccountConfiguration that we defined in there. Now that that is all registered, head on back over to the AccountRepository.
+
+            //TODO 2.3.2.a Register the Repository as a transient, it will be a new instance of the class every time a call is made.
+            services.AddTransient<IAccountRepository, AccountRepository>(); //TODO 2.3.2.c Now that it is registered, the API Should be at a point to use the GetAccount Function. Not that that is defined, we will start the Mutation end of things (Create, Delete, and Update).  Head on over to the RootMutation class to start.
 
             //TODO 1.2.5.a Now we will add a reference to the RootQuery, RootMutation, and the Schema.  Note that the Schema has to be last, as it will not have all the stuff we injected if it wasn't.
             services
