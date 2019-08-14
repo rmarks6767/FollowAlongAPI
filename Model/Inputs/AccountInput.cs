@@ -14,7 +14,7 @@ namespace FollowAlongLearnAPI.Model.Inputs
             Field<NonNullGraphType<NameInput>>("name");
             Field<NonNullGraphType<StringGraphType>>("userName");
             Field<NonNullGraphType<StringGraphType>>("password");
-            Field<NonNullGraphType<StringGraphType>>("id");
+            Field<StringGraphType>("id");
             //TODO 2.4.3.d.4.f Now that you have created those types, head back to the AccountMutation class.
         }
     }

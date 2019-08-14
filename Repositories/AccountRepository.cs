@@ -60,7 +60,8 @@ namespace FollowAlongLearnAPI.Repositories
             try
             {
                 //TODO 2.1.2.c We will create the new account, if anything goes wrong, it will return the failure status code.
-                _ = await client.CreateDocumentAsync(dbHandler.GetCollectionUri(), accountToCreate);
+                ResourceResponse<Document> resource = await client.CreateDocumentAsync(dbHandler.GetCollectionUri(), accountToCreate);
+                accountToCreate.Id = resource.Resource.Id;
                 return HttpStatusCode.OK;
             }
             catch(DocumentClientException e)
