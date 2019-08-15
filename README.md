@@ -28,6 +28,36 @@
     * [(Optional) AccountQuery.cs](#accountquery)
     * [Startup (Pt. 3)](#startup3)
     * [Giving it a Try](#giveitatry)
+* [Module 2: Defining the Logic](#logicdefinition)
+  * [AccountRepository.cs Setup](#accountreposetup)
+    * [IAccountRepository.cs Creation](#Iaccountcreation)
+  * [Database Configuration](#dbconfig)
+    * [AccountConfiguration.cs](#accountconfig)
+    * [Appsettings.json](#appsettings)
+    * [Startup.cs (Pt. 4)](#startup4)
+  * [AccountRepository.cs Logic](#accountlogic)
+    * [The Functions](#functions)
+      * [GetAccount](#getaccount)
+      * [CreateAccount](#createaccount)
+      * [UpdateAccount](#updateaccount)
+      * [DeleteAccount](#deleteaccount)
+  * [IAccountRepository.cs Definitions](#Iaccountrepo)
+  * [The Query logic](#querylogic)
+    * [(Option Dependent) RootQuery Logic](#rootquerylogic)
+    * [(Option Dependent) AccountQuery Logic](#accountquerylogic)
+    * [Startup (Pt. 5)](#startup5)
+  * [RootMutation Logic](#rootmutationlogic)
+    * [AccountMutation](#accountmutation)
+      * [Field Logic](#fieldlogic)
+        * [Create Function](#create)
+        * [Delete Function](#delete)
+        * [Update Function](#update)
+  * [Startup... Is it Finally Over?](#startupdone)
+  * [It is Finally over.](#over)
+* [Module 3: Advanced Tips and Tricks](#advanced)
+  * [Scalar Types](#scalars)
+  * [Error Handling](#errorhandling)
+  * [Making Custom Types](#customtypes)
 
 # Module 1: Before the Logic <a name="module1"></a>
 In this module we will cover the basics of using .NetCore with GraphQL.  We will make a simple Account object and by the end be able to query our account object.  We will also cover the basics of a C# Web API and the things you'll need from that to get GraphQL DotNet to operate properly.  You can find the source of this module at this [commit](https://github.com/rmarks6767/FollowAlongAPI/commit/46597cda7fa4a63ecfc50e1fe871aaeb984e67e6) or by downloading the source from the [release](https://github.com/rmarks6767/FollowAlongAPI/releases/tag/v1.0)
@@ -269,3 +299,254 @@ query {
 }
 ```
 This concludes Module 1.  Continue on to Module 2 Below or back to the [top](#top)
+
+# Module 2: Defining the Logic <a name="logicdefinition"></a>
+Module 2 will cover the Logic of getting the data.  We will also cover making, deleting, and updating accounts.  To start, create a new folder called Repositories and add a class called AccountRepository.
+## AccountRepository.cs Setup <a name="accountreposetup"></a>
+**2.0.1.a** Now we will create an Interface for the repository so that it can be injected by the interface. Create this file in the Repositories folder in another folder called Interfaces.  Call this file IAccountRepository.
+
+### IAccountRepository.cs Creation <a name="Iaccountcreation"></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**2.0.1.b** We will fill this once we create the methods in the AccountRepository class.
+
+**2.0.2.a** Now add inheritance to the interface that you just created.
+**2.0.2.b** Add a reference to the Interfaces folder.
+
+**2.0.3** Before we move forward with the AccountRepository we need to make a configuration of the database info.  Create a file called AccountConfiguration.  You can put this in a folder called Configuration.
+
+## Database Configuration <a name="dbconfig"></a>
+This ultimately will allow you to connect to a Cosmos DB and insert/retrieve data from there.
+
+### AccountConfiguration.cs <a name="accountconfig"></a>
+**2.0.3.a** The example database that we are going to use is Cosmos DB.  There is an emulator that you can download that will work perfectly for what we are doing. --> [Download Here](https://aka.ms/cosmosdb-emulator)
+**2.0.3.b** The URI of the CosmosDb
+**2.0.3.c** The Primary Key for access to the Database.
+**2.0.3.d** The Name of the Database that the accounts are stored in. 
+**2.0.3.e** The collection that the accounts are stored in.
+
+**2.0.4.a** Now we are going to make a function that will return the Document client whenever we need it.
+**2.0.4.b** You will need to add the Microsoft.Azure.Documents NuGet Package here if you have not already, then add a reference to it.
+**2.0.4.c** Cosmos relies on a connection policy, URI, and a Primary key for access.  We are going to make a new connection policy now.
+**2.0.4.d.1** Now that we have set all of the connection policy fields, we can return a new DocumentClient.
+**2.0.4.d.2** Add a reference to System to use the Uri extension.
+
+**2.0.5** Now make some helper functions to return different URIs for different documents. (Basically, make it easier to connect to Cosmos)
+
+**2.0.6** Now we are going to set up the JSON file to properly populate the above fields with data.  At this time head over to the appsettings.json file.
+
+### Appsettings.json <a name="appsettings"></a>
+**2.0.6.a** Add a section named AccountConfiguration.  Add the Uri (This is the one that the emulator resides at), the key (also it should be the same key the emulator uses the same one), and set the DB name and the collections name to whatever you like.  I chose Account and Accounts because that makes the most sense.
+An example of what should be in the file is as follows:
+```json
+{
+  "AccountConfiguration": {
+    "Uri": "https://localhost:8081",
+    "Key": "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==",
+    "AccountDB": "Account",
+    "AccountCollection": "Accounts"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}
+```
+**2.0.7** Now that that's done, we have to add it to the startup.  Head there now.
+
+### Startup.cs (Pt. 4) <a name="startup4"></a>
+**2.0.8.a.1** Make a public Configuration accessor.
+**2.0.8.a.2** Add a reference to the Microsoft.Extensions.Configuration namespace to use the IConfiguration interface.
+**2.0.8.b** Now create a constructor for the Startup class that takes in an IConfiguration.
+**2.0.8.c** Set the configurations equal to each other.
+**2.0.8.d.1** Now we are going to add that configuration to the services (make it dependency injectable).
+**2.0.8.d.2** What this is doing is accessing the appsettings.json file and getting the section AccountConfiguration that we defined in there. Now that that is all registered, head on back over to the AccountRepository.
+**2.0.8.d.3** Add a reference to the AccountConfiguration class we just made in the last step.
+
+## AccountRepository.cs Logic <a name="accountlogic"></a>
+**2.1.0.a.1** Now that the Configuration is all set up, we are ready to move full steam ahead.  Here, we are going to add a document client field that the file can use to establish a connection with Cosmos.
+**2.1.0.a.2** This will give us all of the information that we need to connect with Cosmos.  We are going to set it in the constructor.
+**2.1.0.b** Add a reference to the DocumentClient.
+
+**2.1.0.c** Now, we are going to set the client in the constructor of the AccountRepository.
+**2.1.0.c.1** This will take in a version of the Configuration that we set up. 
+**2.1.1.c.2** Add a reference to IQueryable to use in the function.
+**2.1.0.c.3** We then set the dbhandler equal to the configuration file we set up and get the Document Client from the handler.
+
+### The Functions <a name="functions"></a>
+**2.1.1.a** Now we will create four functions, create, delete, update, and get.  We will start with the get because that one will be the most straight forward.
+
+#### GetAccount <a name="getaccount"></a>
+**2.1.1.b** Add a reference to the Account type.
+**2.1.1.c** Put the entire thing in a try-catch because it could fail if Cosmos is not online.
+**2.1.1.d** We will now query Cosmos using the CreateDocumentQuery Function.  We specify that it is of type Account so that it will return an object that is an account.
+**2.1.1.e** We then say that the userName (which will be our partition key) must equal the username that we provide. 
+**2.1.1.f** We then return the first result that we get from Cosmos.
+**2.1.1.g** If it fails for whatever reason, we will return a default of the Account type.
+
+#### CreateAccount <a name="createaccount"></a>
+**2.1.2.a.1** Now we will make the Account Creation function
+**2.1.2.a.2** Add references to the Document and Task for use in the create function.  Also, a status code to use to see if there was a success or failure.
+**2.1.2.b** We will also encapsulate this in a try-catch, in case of any errors.
+**2.1.2.c** We will create the new account, if anything goes wrong, it will return the failure status code.
+**2.1.2.d** Will return the status code from Cosmos if any error occurs
+
+#### UpdateAccount <a name="updateaccount"></a>
+**2.1.3.a** Now we will make the Account Updating function.
+**2.1.3.b** This account must include the id and the userName of the account to be updated.
+**2.1.3.c** We will also encapsulate this in a try-catch, in case of any errors.
+**2.1.3.d** We will Upsert the account, if anything goes wrong, it will return the failure status code.
+**2.1.3.e** Will return the status code from Cosmos if any error occurs.
+
+#### DeleteAccount <a name="deleteaccount"></a>
+**2.1.4.a** Finally, we will add delete functionality.
+**2.1.4.b** To delete a document, we are going to need the id of the document and the username of the account.
+**2.1.4.c** Specify the partition key value in the request options.
+**2.1.4.d** Then return an OK response code if it succeeds.
+**2.1.4.e** Otherwise, return the code from Cosmos.
+
+**2.1.5** Now that we are finished with the logic of the AccountRepository, we can put the definition of the functions in the IAccountRepository.  Head on over there now.
+
+## IAccountRepository.cs Definitions <a name="Iaccountrepo"></a>
+**2.1.6.x** Add the same references that you have in the AccountRepository, they will come from the functions below.
+
+**2.1.6.a** Now we will add the functions that we just defined.
+**2.1.6.b** The first one was the Get Account, add that here.
+**2.1.6.c** The next is the Create Account function.
+**2.1.6.d** The next is the Update Account function.
+**2.1.6.e** The final is the Delete Account function.
+
+**2.1.7** Now that the functionality is defined, we can head on over to the AccountQuery or RootQuery class (depending on which one you chose to do).
+
+## The Query logic
+### (Option Dependent) RootQuery Logic  <a name="rootquerylogic"></a>
+**2.2.a.1** It's time to add the injection!  We are going to inject the Repository by its interface.  Basically, it's done this way for testing and to save memory.
+**2.2.a.2** Add a reference to the IAccountRepository
+**2.2.a.3** Remove the old definition of Account, it is no longer needed.
+**2.2.a.4** Now we are going to add an argument that must be passed into the query.
+**2.2.a.5** You can also add a default if it is an optional parameter, but in this case, we do not want it to be optional.
+**2.2.a.6** Now we can just return the function call to GetAccountBy.
+
+### (Option Dependent) AccountQuery Logic  <a name="accountquerylogic"></a>
+**2.2.b.1** It's time to add the injection!  We are going to inject the Repository by its interface.  Basically, it's done this way for testing and to save memory.
+**2.2.b.2** Add a reference to the IAccountRepository
+**2.2.b.3** Remove the old definition of Account, it is no longer needed.
+**2.2.b.4** Now we are going to add an argument that must be passed into the query.
+**2.2.b.5** You can also add a default if it is an optional parameter, but in this case, we do not want it to be optional.
+**2.2.b.6** Now we can just return the function call to GetAccountBy.
+
+
+**2.3.1** It is now time to register the repository for dependency injection, head on over to the Startup.cs class again.
+
+### Startup (Pt. 5)  <a name="startup5"></a>
+**2.3.2.a** Register the Repository as a transient, it will be a new instance of the class every time a call is made.
+**2.3.2.b** Register the repository interface and class.
+**2.3.2.c** Now that it is registered, the API Should be at a point to use the GetAccount Function. Not that that is defined, we will start the Mutation end of things (Create, Delete, and Update).  Head on over to the RootMutation class to start.
+
+## RootMutation Logic  <a name="rootmutationlogic"></a>
+**2.4.1** Now it is time to write the logic for the mutation end of things.  Because there is three functions that need to be defined, we are going to put it in a separate file called AccountMutation.
+**2.4.2** Before we Create that file, we are going to register it to the RootMutation so we do not have to come back to this file
+**2.4.3** Now Add that file to the Mutations folder. Head on over to that new file now.
+
+### AccountMutation  <a name="accountmutation"></a>
+**2.4.3.a.1** Add inheritance to the ObjectGraphType.
+**2.4.3.a.2** Add a reference to the ObjectGraphType.
+
+**2.4.3.b.1** Add a constructor for the AccountMutation and have the IAccountRepository be there.
+**2.4.3.b.2** Add a reference to the IAccountRepository.
+
+#### Field Logic  <a name="fieldlogic"></a>
+
+##### Create Function  <a name="create"></a>
+**2.4.3.d.1** Now add a field for the create function.
+**2.4.3.d.2** Add a reference to the Product Graph type.
+**2.4.3.d.3** We have to add a query argument for the account that we will be passing in.  This will be of type AccountInput, which we will create in a second.
+**2.4.3.d.4** In the model folder, create another folder called Inputs.  In there add the AccountInput type.
+**2.4.3.d.5** Add references to the created Inputs, the Account object, and the System.Net for the status codes.
+**2.4.3.d.6** Now that the Input is there, it's as simple as hooking up the AccountRepository Logic.
+**2.4.3.d.7** We want to start by getting the account from the arguments.  We then want to send that directly to Cosmos to have the account created.
+
+##### Delete Function  <a name="delete"></a>
+**2.4.3.e.1** Now we are going to create a field for the delete function.
+**2.4.3.e.2** Add two arguments that will be how we identify which account to delete.  They will correspond to the id and the userName.
+**2.4.3.e.3** Now that we have those two arguments, we can send them to the DeleteAccount function.
+**2.4.3.e.4** After we get back a status code from Cosmos, we want to either return null, which will symbolize a failure, or return the object that was passed in.
+**2.4.3.e.5** Obviously this is not a good way to handle Error reporting.  Personally, I would suggest creating a scalar type.  I'll cover that in a little bonus tips and tricks module (Module 3).
+
+##### Update Function  <a name="update"></a>
+**2.4.3.f.1** The final field will be the Update function.
+**2.4.3.f.2** We have to add a query argument for the account that we will be passing in.  This will be of type AccountInput.
+**2.4.3.f.3** Now that the Input is there, it's as simple as hooking up the AccountRepository Logic.
+**2.4.3.f.4** We want to start by getting the account from the arguments.  We then want to send that directly to Cosmos to have the account created.
+**2.4.3.f.5** After we get back a status code from Cosmos, we want to either return null, which will symbolize a failure, or return the object that was passed in.
+
+**2.5** Now it's time to register everything that we have just done and that will wrap up this tutorial series!  Head on over to the Startup class one last time.
+
+## Startup... Is it Finally Over?  <a name="startupdone"></a>
+**2.5.1.a** Add the AccountMutation, AccountInput, AddressInput, and the NameInput to the services.
+**2.5.1.b** Add the reference to those Inputs and you are done!
+
+## It is Finally over.  <a name="over"></a>
+So you just made a GraphQL API from scratch!  Pat yourself on the back.  So now you are aware of all the things that go into making an API, the many intricate parts that get this machine running smoothly.  Now that we've covered the basics/advanced topics of creating a GraphQL API, let's discuss some of the little extra things that will make your life easier.
+ 
+# Module 3: Advanced Tips and Tricks  <a name="advanced"></a>
+Some of the following are pretty straight forward, while others are going to take some research of your own any questions, feel free to reach out to me.
+
+## Scalar Types  <a name="scalars"></a>
+Now Scalar types in GraphQL are any type that can not be queried any lower than the type they are defined.  Take a string for example.  A string is a predefined scalar type that does not have any other levels (fields) that can be queried.  This is the definition of a string type from GraphQL DotNet [Github](https://github.com/graphql-dotnet/graphql-dotnet/blob/master/src/GraphQL/Types/StringGraphType.cs):
+```csharp
+using GraphQL.Language.AST;
+
+namespace GraphQL.Types
+{
+    public class StringGraphType : ScalarGraphType
+    {
+        public StringGraphType() => Name = "String";
+
+        public override object Serialize(object value) => value?.ToString();
+
+        public override object ParseValue(object value) => value?.ToString();
+
+        public override object ParseLiteral(IValue value) => (value as StringValue)?.Value;
+    }
+}
+``` 
+Now with looking at how the string implements the scalar type, you can kind of understand what is going on.  The object is being taken in and parsed to a string.  Now using this knowledge, we can create a scalar type.  Let's make a scalar type for a Dictionary.  We will call it DictionaryGraph.  How we do create it is like so:
+```csharp
+using GraphQL.Language.AST;
+using GraphQL.Types;
+using System.Collections.Generic;
+using GraphQL;
+
+namespace API.Model.Graph.ScalarTypes
+{
+    public class DictionaryGraphType<T, TT> : ScalarGraphType
+    {
+        public DictionaryGraphType() => Name = $"Dictionary_{typeof(T).Name}_{typeof(TT).Name}";
+        public override object ParseLiteral(IValue value) => ParseValue(value);
+        public override object ParseValue(object value) => ValueConverter.ConvertTo(value, typeof(Dictionary<T, TT>));
+        public override object Serialize(object value) => ParseValue(value);
+    }
+}
+
+```
+For all of the methods that we are required to inherit, we will convert the object that is passed into a dictionary of the type that it was created with.  You can apply this example to pretty much any scalar type that you could possibly create.
+
+## Error Handling  <a name="errorhandling"></a>
+Error handling should be done on several fronts, actual errors, status code, and what caused the error.  To accomplish this you can make a custom response that sends back the data, a status code, and a dictionary of errors and where they occurred.  Alternatively, you can send back a list of status codes that correspond to a list of errors.  There are many different approaches you can take, but this is more of a by need basis.  To actually log the errors to GraphQL, you are going to add them in the context. 
+So in a class that is an ObjectGraphType: (AccountQuery, AccountMutation, etc.)
+```csharp
+using GraphQL;
+using GraphQL.Types;
+...
+resolve: context =>
+{
+    ... Code above that leads to error
+    context.Errors.Add(new ExecutionError("An Error Occurred"));
+    ...
+}
+```
+You can also make custom ExecutionErrors, which I did.  This allowed me to log a status code of what the error actually was.  Reporting the errors here is important, as they are bubbled up to the controller. 
+
+## Making Custom Types  <a name="customtypes"></a>
+Custom types can be quite beneficial when it comes to doing advanced functionality.  Don't be afraid to inherit some stuff and add other fields onto it.
