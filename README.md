@@ -492,6 +492,8 @@ An example of what should be in the file is as follows:<br>
 ## It is Finally over.  <a name="over"></a>
 So you just made a GraphQL API from scratch!  Pat yourself on the back.  So now you are aware of all the things that go into making an API, the many intricate parts that get this machine running smoothly.  Now that we've covered the basics/advanced topics of creating a GraphQL API, let's discuss some of the little extra things that will make your life easier.
  
+ This concludes Module 2.  Continue on to Module 3 Below or back to the [top](#top)
+ 
 # Module 3: Advanced Tips and Tricks  <a name="advanced"></a>
 Some of the following are pretty straight forward, while others are going to take some research of your own. If you have any questions, feel free to reach out to me.
 
@@ -553,3 +555,6 @@ You can also make custom ExecutionErrors, which I did.  This allowed me to log a
 
 ## Making Custom Types  <a name="customtypes"></a>
 Custom types can be quite beneficial when it comes to doing advanced functionality.  Don't be afraid to inherit GraphQL Dotnet related fields and give them your own twist.  Creating things like Custom Response Messages and Custom Errors can make reporting to the client side quite easy.
+
+Back to [top](#top)
+
