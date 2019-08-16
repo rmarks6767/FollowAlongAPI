@@ -493,7 +493,7 @@ An example of what should be in the file is as follows:<br>
 So you just made a GraphQL API from scratch!  Pat yourself on the back.  So now you are aware of all the things that go into making an API, the many intricate parts that get this machine running smoothly.  Now that we've covered the basics/advanced topics of creating a GraphQL API, let's discuss some of the little extra things that will make your life easier.
  
 # Module 3: Advanced Tips and Tricks  <a name="advanced"></a>
-Some of the following are pretty straight forward, while others are going to take some research of your own any questions, feel free to reach out to me.
+Some of the following are pretty straight forward, while others are going to take some research of your own. If you have any questions, feel free to reach out to me.
 
 ## Scalar Types  <a name="scalars"></a>
 Now Scalar types in GraphQL are any type that can not be queried any lower than the type they are defined.  Take a string for example.  A string is a predefined scalar type that does not have any other levels (fields) that can be queried.  This is the definition of a string type from GraphQL DotNet [Github](https://github.com/graphql-dotnet/graphql-dotnet/blob/master/src/GraphQL/Types/StringGraphType.cs):
